@@ -1,0 +1,328 @@
+<!--
+    Created By Hu
+ -->
+<!DOCTYPE html>
+<html lang="zh-ch" xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue学习项目</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<body>
+
+<h1>实例化Vue</h1>
+<div id="app">
+    {{ message }}
+</div>
+<hr>
+
+<h1>循环渲染</h1>
+<ul id="example-1">
+    <li v-for="item in items">
+        {{ item.message }}
+    </li>
+</ul>
+<hr>
+
+<h1>计算属性</h1>
+<div id="computed-demo">
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <td>科目</td>
+            <td>成绩</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>语文</td>
+            <td>
+                <label>
+                <input type="text" v-model.number="chinese">
+                </label></td>
+        </tr>
+        <tr>
+            <td>数学</td>
+            <td>
+                <label>
+                    <input type="text" v-model.number="math">
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td>总分</td>
+            <td>{{ sum }}</td>
+        </tr>
+        <tr>
+            <td>平均分</td>
+            <td>{{ average }}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<hr>
+<h1>组件</h1>
+<div id="component-demo1">
+    <button-counter></button-counter>
+</div>
+<div id="component-demo2" v-bind:style="{fontSize:postFontSize + 'em'}">
+    <!--   <blog-post v-for="post in posts" v-bind:post="post" v-bind:key="post.id" v-on:enlarge-font="postFontSize += $event"></blog-post> -->
+
+    <!-- 使用函数处理事件 -->
+    <blog-post v-for="post in posts" v-bind:post="post" v-bind:key="post.id" v-on:enlarge-font="onEnlargeFont"></blog-post>
+</div>
+<div id="component-demo3">
+    <h3>使用局部组件</h3>
+    <alert-box></alert-box>
+</div>
+<div id="component-demo4">
+    <h3>配置组件</h3>
+    <like></like>
+</div>
+<template id="like-component">
+    <button class="btn" v-bind:class="{'btn-danger':liked}" v-on:click="toggle_like">
+        点赞👍 {{ like_count }}
+    </button>
+</template>
+<div id="component-demo5">
+    <h3>组件通信-父子组件</h3>
+    <user msg="666" username="xiaozhong"></user>
+</div>
+<div id="component-demo6">
+    <h3>组件通信-子父组件</h3>
+    <balance></balance>
+</div>
+<div id="component-demo7">
+    <h3>组件通信-平行组件</h3>
+    <huahua></huahua>
+    <shuandan></shuandan>
+</div>
+<hr>
+
+<div id="filter-demo">
+    <h3>过滤器</h3>
+    {{ price | currency('USD') }}
+</div>
+
+<script src="js/vue.js"></script>
+<script>
+    var vm = new Vue({
+        el: "#app",
+        data: {
+            message: "hello"
+        }
+    });
+
+    var example1 = new Vue({
+        el: "#example-1",
+        data: {},
+        computed: {
+            items: function() {
+                return [{ message: "Foo8" }, { message: "Bar6" }];
+            }
+        }
+    });
+
+    var computed_demo = new Vue({
+        el:'#computed-demo',
+        data:{
+            chinese:0,
+            math:0
+        },
+        computed: {
+            sum:function() {
+                return this.chinese + this.math;
+            },
+            average:function () {
+                return Math.round(this.sum / 2);
+            }
+        }
+    });
+
+    Vue.component("button-counter", {
+        data: function() {
+            return {
+                count: 0
+            };
+        },
+        template:
+            '<div><button v-on:click="count++">点我</button><h2>点击了 ： {{ count }} 次</h2></div>'
+    });
+    new Vue({
+        el: "#component-demo1"
+    });
+
+    Vue.component("blog-post", {
+        props: ["post"],
+        template:
+
+        //使用向外抛出事件对象 $event 获取
+        // "<div><button v-on:click=\"$emit('enlarge-font', 0.1)\">放大</button> <h3> {{ post.title }} </h3> <p v-html='post.content'></p> </div>"
+
+        //使用函数处理事件，并且将所处理的值放在第二个参数中，在接收函数中使用第一个参数接收
+            "<div><button v-on:click=\"$emit('enlarge-font', 0.1)\">放大</button> <h3> {{ post.title }} </h3> <p v-html='post.content'></p> </div>"
+    });
+    new Vue({
+        el: "#component-demo2",
+        data: {
+            postFontSize: 1,
+            posts: [
+                { id: 1, title: "666", content: "666666" },
+                { id: 2, title: "777777", content: "77777777" }
+            ]
+        },
+        methods:{
+            onEnlargeFont:function(size) {
+                this.postFontSize += size;
+            }
+        }
+    });
+
+    //局部组件
+    new Vue({
+        el:'#component-demo3',
+        components:{
+            'alert-box':{
+                template: '<button @click="on_click">弹弹弹</button>',
+                data:function () {
+                    return {
+                        message:'Hello'
+                    }
+                },
+                methods: {
+                    on_click:function () {
+                        alert(this.message);
+                    }
+                }
+            }
+        }
+    });
+
+    //配置组件
+    Vue.component('like', {
+        template:'#like-component',
+        data:function () {
+            return {
+                like_count:0,
+                liked:false,
+            }
+        },
+        methods:{
+            toggle_like:function () {
+                if (this.liked) {
+                    this.like_count--;
+                } else {
+                    this.like_count++;
+                }
+                this.liked = !this.liked;
+            }
+        }
+    });
+    new Vue({
+        el:'#component-demo4'
+    });
+
+    Vue.component('user', {
+        template:'<a v-bind:href="\'/user/\' + username">{{ username }}</a>',
+        props:['msg', 'username'],
+        methods:{
+            on_click:function () {
+                alert(this.msg)
+            }
+        }
+    });
+    new Vue({
+        el:'#component-demo5'
+    })
+
+    Vue.component('balance', {
+        template:`
+            <div>
+                <show v-on:show-balance="show_balance"></show>
+                <p v-if="show_balance_value">您的余额：{{ balance }}</p>
+            </div>
+        `,
+        data:function () {
+            return {
+                balance:2,
+                show_balance_value:false
+            }
+        },
+        methods:{
+            show_balance: function (data) {
+                this.show_balance_value = !this.show_balance_value;
+                console.log(data)
+            }
+        }
+    });
+    Vue.component('show', {
+        template:'<button v-on:click="on_click">显示余额</button>',
+        methods:{
+            on_click:function () {
+                this.$emit('show-balance', {a : 1, b : 2});
+            }
+        }
+    });
+    new Vue({
+        el:'#component-demo6'
+    })
+
+
+    var Event = new Vue();
+    Vue.component('huahua', {
+        template:`
+            <div>
+                我说：<input v-on:keyup="on_change" type="text" v-model="i_said"/>
+            </div>
+        `,
+        data:function () {
+            return {
+                i_said:''
+            }
+        },
+        methods:{
+            on_change:function () {
+                Event.$emit('huahua-said-something', this.i_said);
+            }
+        }
+    });
+    Vue.component('shuandan', {
+        template:`
+            <div>
+                花花说：{{ huahua_said }}
+            </div>
+        `,
+        data:function () {
+            return {
+                huahua_said:''
+            }
+        },
+        mounted:function () {
+            var me = this;
+            Event.$on('huahua-said-something', function (data) {
+                me.huahua_said = data;
+            })
+        }
+    });
+    new Vue({
+        el:'#component-demo7'
+    });
+    
+    Vue.filter('currency', function (val, unit) {
+        val = val || 0;
+        unit = unit || '元';
+        return val + unit;
+    });
+
+    new Vue({
+        el:'#filter-demo',
+        data:{
+            price:0
+        }
+    })
+</script>
+</body>
+</html>
+

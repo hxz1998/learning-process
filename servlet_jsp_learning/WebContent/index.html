@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	
+	<h1>Hello</h1>
+	
+	<form action="http://localhost:8080/MyServletAndJSPLearning/testRequest" method="get">
+		<label for="course">英语<input type="checkbox" name="course" value="英语"/></label> 
+		<label for="course">语文<input type="checkbox" name="course" value="语文"/></label> 
+		<label for="course">数学<input type="checkbox" name="course" value="数学"/></label> 
+		<label for="user"><input type="text" name="user"/></label>
+		<button type="submit">提交</button>
+	</form>
+	
+	<form action="http://localhost:8080/MyServletAndJSPLearning/body.view" method="post" enctype="muliipart/form-data">
+		选择文件：<input type="file" name="filename" value=""/><br>
+		<input type="submit" name="upload" value="upload">  
+	</form>
+</body>
+</html>

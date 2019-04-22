@@ -1,0 +1,56 @@
+<!--
+    Created By Hu
+ -->
+<!DOCTYPE html>
+<html lang="zh-ch">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div id="app">
+    <panel>
+        <div slot="header">名字</div>
+        <div slot="body">身体</div>
+        <div slot="footer">脚</div>
+    </panel>
+    <panel>
+        <div slot="header">名字2</div>
+        <div slot="body">身体2</div>
+        <div slot="footer">脚2</div>
+    </panel>
+</div>
+
+<template id="panel">
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <slot name="header"></slot>
+            </div>
+            <div class="panel-body">
+                <slot name="body"></slot>
+            </div>
+            <div class="panel-footer">
+                <slot name="footer"></slot>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script src="js/jquery-3.3.1.min.js"></script>
+<script src="js/bootstrap.js"></script>
+<script src="js/vue.js"></script>
+<script>
+    Vue.component('panel', {
+        template:'#panel'
+    });
+
+    new Vue({
+        el:'#app'
+    })
+</script>
+</body>
+</html>

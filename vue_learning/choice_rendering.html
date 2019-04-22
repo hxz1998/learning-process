@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+	</head>
+
+	<body>
+		
+		<h1 class="h1" v-if="ok === 'A'">Yes</h1>
+		<h1 class="h1" v-else-if="ok === 'b'">Yes</h1>
+		<h1 class="h1" v-else>Yes</h1>		
+		<script src="js/vue.min.js"></script>
+		<script type="text/javascript">
+			var vm = new Vue({
+				el:'.h1',
+				data:{
+					ok : 'A'
+				}
+			})
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,254 @@
+<!--
+    Created By Hu
+ -->
+<!DOCTYPE html>
+<html lang="zh-ch" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<body>
+
+<div id="router-demo1">
+    <div>
+        <!--基本用法-->
+        <router-link to="/">首页</router-link>
+        <router-link to="/about">关于我们</router-link>
+        <!--基本传参-->
+        <router-link to="/user/huahua">王花花</router-link>
+        <router-link to="/user/lishuandan">李栓但</router-link>
+        <!--使用query方法传参-->
+        <router-link to="/user/lishuandan?age=22">李栓但和年龄</router-link>
+        <!--手动访问和传参-->
+        <button v-on:click="surf">漫游</button>
+    </div>
+    <div>
+        <router-view></router-view>
+    </div>
+</div>
+<hr>
+<!--命名视图-->
+<div id="router-demo2">
+    <div>
+        <router-link to="/">首页</router-link>
+        <router-link to="/user">用户管理</router-link>
+        <router-link to="/post">帖子管理</router-link>
+    </div>
+    <div>
+        <router-view name="sidebar"></router-view>
+        <router-view name="content"></router-view>
+    </div>
+</div>
+
+<!--导航钩子-->
+<div id="router-demo3">
+    <div>
+        <router-link to="/">首页</router-link>
+        <router-link to="/login">登录</router-link>
+        <router-link to="/post">帖子管理</router-link>
+    </div>
+    <div>
+        <router-view></router-view>
+    </div>
+</div>
+
+<script src="js/jquery-3.3.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/vue.js"></script>
+<script src="js/vue-router.js"></script>
+
+<script>
+    var routes = [
+        {
+            path: '/',
+            component: {
+                template: `
+                <div>
+                <h1>首页</h1>
+                </div>
+                `
+            }
+        }, {
+            path: '/about',
+            component: {
+                template: `
+                <div>
+                <h1>关于我们</h1>
+                </div>
+                `
+            }
+        }, {
+            //地址传参
+            // path: '/user/:name',
+            // component:{
+            //     template:`
+            //     <div>
+            //     <h1>我叫 ： {{ $route.params.name }}</h1>
+            //     <h1>我今年 ： {{ $route.query.age }}</h1>
+            //     <router-link v-bind:to="'/user/' + $route.params.name + 'more'">更多信息</router-link>
+            //     <router-view></router-view>
+            //     </div>
+            //     `
+            // },
+            //地址追加
+            path: '/user/:name',
+            name: 'user',
+            component: {
+                template: `
+                <div>
+                <h1>我叫：{{ $route.params.name }}</h1>
+                <!--<router-link v-bind:to="'/user/' + $route.params.name + '/more'">更多信息</router-link>-->
+                <router-link to="more" append>更多信息</router-link>
+                <router-view></router-view>
+                </div>
+                `
+            },
+            children: [
+                {
+                    path: 'more',
+                    component: {
+                        template: `
+                            <div>
+                                <h1>用户{{$route.params.name}}的详细信息</h1>
+                                <p>481237498172893749729</p>
+                            </div>
+                        `
+                    }
+                }
+            ]
+        }
+    ];
+    var router = new VueRouter({
+        routes: routes
+    });
+    new Vue({
+        el: '#router-demo1',
+        router: router,
+        methods: {
+            surf: function () {
+                setTimeout(function () {
+                    this.router.push('/about');
+                    setTimeout(function () {
+                        this.router.push({name: 'user', params: {name: 'wanghuahua'}});
+                    }, 2000);
+                }, 2000);
+            }
+        }
+    });
+
+    // 命名视图
+    var routes2 = [
+        {
+            path: '/',
+            component: {
+                template: `
+                <div>
+                <h1>首页</h1>
+                </div>
+                `
+            }
+        },
+        {
+            path: '/user',
+            components: {
+                sidebar: {
+                    template: `
+                    <div>
+                    <ul>
+                    <li>用户管理</li>
+                    <li>权限列表</li>
+                    </ul>
+                    </div>
+                    `
+                },
+                content: {
+                    template: `
+                    <div>一堆内容一堆内容一堆内容一堆内容一堆内容一堆内容一堆内容</div>
+                    `
+                }
+            }
+        },
+        {
+            path: '/post',
+            components: {
+                sidebar: {
+                    template: `
+                    <div>
+                    <ul>
+                    <li>帖子管理</li>
+                    <li>帖子列表</li>
+                    </ul>
+                    </div>
+                    `
+                },
+                content: {
+                    template: `
+                    <div>一堆内容一堆内容一堆内容一堆内容一堆内容一堆内容一堆内容</div>
+                    `
+                }
+            }
+        }
+    ];
+    var router2 = new VueRouter({
+        routes: routes2
+    });
+    new Vue({
+        el: '#router-demo2',
+        router: router2
+    })
+
+
+    // 导航钩子
+    var routes3 = [
+        {
+            path: '/',
+            component: {
+                template: `
+                <div>
+                    <h3>首页</h3>
+                </div>
+                `
+            }
+        },
+        {
+            path:'/login',
+            component:{
+                template:`
+                <div>
+                <h1>登录</h1>
+                </div>
+                `
+            }
+        },
+        {
+            path:'/post',
+            component:{
+                template:`
+                <div>
+                <h1>帖子管理</h1>
+                </div>
+                `
+            }
+        },
+    ];
+    var router3 = new VueRouter({
+        routes:routes3
+    });
+    router3.beforeEach(function (to, from, next) {
+        var logged_in = true;
+        if (!logged_in && to.path == '/post') {
+            next('/login');
+        } else {
+            next();
+        }
+    });
+    new Vue({
+        el:'#router-demo3',
+        router:router3,
+    })
+</script>
+
+</body>
+</html>

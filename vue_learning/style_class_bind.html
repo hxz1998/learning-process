@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:v-bind="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="css/mui.min.css" />
+		<style type="text/css">
+			.blue{
+				width: 200px;
+				height: 200px;
+				background-color: blue;
+			}
+			.red{
+				width: 200px;
+				height: 200px;
+				background-color: red;
+			}
+			.isWidth{
+				width: 600px;
+			}
+		</style>
+	</head>
+	<body>
+		<!--<div id="btn1" v-bind:class="[{'blue':isBlue}]" class="isWidth">
+		</div>
+		-->
+		<div id="btn1" v-bind:class="classObject">
+		</div>
+		
+		<script type="text/javascript" src="js/vue.js" ></script>
+		
+		<script>
+			var vm = new Vue({
+				el:'#btn1',
+				data:{
+//					isBlue:true,
+					classObject:{
+						'blue':true,
+						'isWidth':true
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

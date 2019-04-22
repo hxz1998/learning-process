@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">MaterialTest</string>
+    <string name="menu_item_backup">备份</string>
+    <string name="menu_item_delete">删除</string>
+    <string name="menu_item_setting">设置</string>
+    <string name="hello_world">你好世界</string>
+    <string name="nav_call">打电话</string>
+    <string name="nav_mail">邮件</string>
+    <string name="nav_task">任务</string>
+    <string name="mail">123456789@qq.com</string>
+    <string name="username">little girl</string>
+</resources>

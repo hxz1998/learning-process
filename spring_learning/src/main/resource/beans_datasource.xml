@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd">
+    <!-- 用于xml配置Spring -->
+
+    <context:annotation-config></context:annotation-config> 
+    <context:component-scan base-package="com.mrhu.spring"></context:component-scan>
+    <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+
+    <!--
+    <bean id="myDataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/spring"/>
+        <property name="username" value="root"/>
+        <property name="password" value="1111"/>
+    </bean>
+    -->
+
+    <!--
+    <bean id="logInteceptor" class="LogInteceptor">
+    </bean>
+    <aop:config>
+        <aop:pointcut id="servicePointcut" expression="execution(public * com.mrhu.spring.service..*.add(..))"></aop:pointcut>
+        <aop:aspect id="logAspect" ref="logInteceptor">
+            <aop:before method="before" pointcut-ref="servicePointcut"></aop:before>
+        </aop:aspect>
+    </aop:config>
+    -->
+
+    <!-- 使用jdbc.properties配置连接池 -->
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations" value="classpath:jdbc.properties"/>
+    </bean>
+    <bean id="dataSource" destroy-method="close"
+          class="org.apache.commons.dbcp2.BasicDataSource">
+        <property name="driverClassName" value="${jdbc.driverClassName}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+
+    <!-- 注入方向：dataSource->sessionFactory->txManager,接下来所有的事务就交给txManager管理 -->
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+
+        <!--<property name="annotatedClasses">
+            <list>
+                <value>User</value>
+                <value>Log</value>
+            </list>
+        </property>-->
+
+        <!-- packagesToScan使用，使得model包中的内容得以全部实例化 -->
+        <property name="packagesToScan">
+            <list>
+                <value>com.mrhu.spring.model</value>
+            </list>
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+            </props>
+        </property>
+    </bean>
+</beans>

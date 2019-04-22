@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+
+    <session-factory>
+
+        <!-- Database connection settings -->
+        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="connection.url">jdbc:mysql://localhost/hibernate</property>
+        <property name="connection.username">root</property>
+        <property name="connection.password">1111</property>
+
+        <!-- JDBC connection pool (use the built-in) -->
+        <!-- <property name="connection.pool_size">1</property> -->
+
+        <!-- SQL dialect -->
+        <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+
+        <!-- Enable Hibernate's automatic session context management -->
+       	<property name="current_session_context_class">thread</property>
+
+        <!-- Disable the second-level cache  -->
+        <!-- <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property> -->
+		<!--  
+		<property name="cache.use_second_level_cache">true</property>
+		<property name="cache.provider_class">org.hibernate.cache.EhCacheProvider</property>-->
+		<property name="cache.use_second_level_cache">true</property>
+		<property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</property>
+		
+       
+        <!-- Echo all executed SQL to stdout -->
+        <property name="show_sql">true</property>
+
+        <!-- Drop and re-create the database schema on startup -->
+        <property name="hbm2ddl.auto">create</property>
+
+		<!-- 
+        <mapping resource="com/mrhu/hibernate/model/Student.hbm.xml"/>
+		<mapping class="com.mrhu.hibernate.model.Teacher"/>
+		<mapping class="com.mrhu.hibernate.model.Project"/>
+		<mapping class="com.mrhu.hibernate.model.Course"/>
+		<mapping class="com.mrhu.hibernate.model.Monkey"/>
+		<mapping class="com.mrhu.hibernate.model2.Husband"/>
+		<mapping class="com.mrhu.hibernate.model2.Wife"/>
+		<mapping class="com.mrhu.hibernate.componment.Husband"/>
+		 
+		<mapping class="com.mrhu.hibernate.mang2one.Group"/>
+		<mapping class="com.mrhu.hibernate.mang2one.User"/>
+		
+		<mapping class="com.mrhu.hibernate.one2many.Group"/>
+		<mapping class="com.mrhu.hibernate.one2many.User"/>
+		
+		
+		<mapping class="com.mrhu.hibernate.many2many.Student"/>
+		<mapping class="com.mrhu.hibernate.many2many.Teacher"/>
+		
+		
+		<mapping class="com.mrhu.hibernate.crud.Group"/>
+		<mapping class="com.mrhu.hibernate.crud.User"/>
+		
+		<mapping class="com.mrhu.hibernate.collection.mapping.Group"></mapping>
+		<mapping class="com.mrhu.hibernate.collection.mapping.User"></mapping>
+		
+		<mapping class="com.mrhu.hibernate.joined.Teacher"></mapping>
+		<mapping class="com.mrhu.hibernate.joined.Person"></mapping>
+		<mapping class="com.mrhu.hibernate.joined.Student"></mapping>
+		
+		
+		<mapping class="com.mrhu.hibernate.tree.Org"/>
+		
+		<mapping class="com.mrhu.hibernate.coursescorestudent.Student"></mapping>
+		<mapping class="com.mrhu.hibernate.coursescorestudent.Score"></mapping>
+		<mapping class="com.mrhu.hibernate.coursescorestudent.Course"></mapping>
+		
+		
+		<mapping class="com.mrhu.hibernate.topic.Category"></mapping>
+		<mapping class="com.mrhu.hibernate.topic.Msg"></mapping>
+		<mapping class="com.mrhu.hibernate.topic.Topic"></mapping>
+		
+		
+		<mapping class="com.mrhu.hibernate.topic.Category"></mapping>
+		<mapping class="com.mrhu.hibernate.topic.Msg"></mapping>
+		<mapping class="com.mrhu.hibernate.topic.Topic"></mapping>
+		-->
+		
+		<mapping class="com.mrhu.hibernate.concurrency.Account"/>
+    </session-factory>
+
+</hibernate-configuration>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

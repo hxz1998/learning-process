@@ -1,0 +1,64 @@
+<!--
+    Created By Hu
+ -->
+<!DOCTYPE html>
+<html lang="zh-ch">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+
+<div id="app">
+    <tooltip></tooltip>
+    <popup></popup>
+</div>
+
+<script src="js/vue.js"></script>
+<script>
+    var base = {
+        methods: {
+            toggle:function() {
+                this.visible = !this.visible;
+            },
+            show:function () {
+                this.visible = true;
+            },
+            hide:function () {
+                this.visible = false;
+            }
+        },
+        data:function () {
+            return {
+                visible:false
+            }
+        }
+    };
+
+    Vue.component('tooltip', {
+        template: `
+        <div>
+            <span @mouseenter="show" @mouseleave="hide">工具条</span>
+            <div v-if="visible">43918408129038490192083948</div>
+        </div>
+        `,
+        mixins:[base]
+    });
+
+    Vue.component('popup', {
+        template:`
+        <div>
+            <button @click="toggle">popup</button>
+            <div v-if="visible">jfdklajfldajlfjldasjlf</div>
+        </div>
+        `,
+        mixins:[base]
+
+    });
+    new Vue({
+        el:'#app'
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<!-- 
+		用于readme文档第
+		1-7节内容
+	-->	
+	
+	<!-- id和name效果一样 -->
+	<!-- <bean id="u" class="UserDAOImpl"></bean> -->
+   	<!--  
+   	<bean name="u" class="UserDAOImpl"></bean>
+	-->
+	
+	
+	
+    <bean name="userService" class="com.mrhu.spring.OldVersion.service.onetoseven.UserService" scope="prototype">
+		<!-- setter方法注入 -->
+		<!-- 
+		<property name="userDAO">
+        	<ref bean="u"/>
+    	</property>
+    	-->
+    	
+    	<!-- 构造方法注入 -->
+    	<!-- 
+    	<constructor-arg>
+    		<ref bean="u"></ref>
+    	</constructor-arg>
+    	-->
+	</bean>
+	
+	<!-- 简单属性的注入 -->
+	<!--  
+	<bean name="userDAO" class="UserDAOImpl">
+		<property name="daoId" value="9"></property>
+		<property name="daoStatus" value="good"></property>
+	</bean>
+	-->
+	
+	<!-- 集合注入 -->
+	<bean id="moreComplexObject" class="com.mrhu.spring.OldVersion.dao.impl.onetoseven.UserDAOImpl">
+	    <!-- results in a setSomeList(java.util.List) call -->
+	    <property name="list">
+	        <list>
+	            <value>a list element followed by a reference</value>
+	            <value>a list element followed by a reference</value>
+	            <!-- 存放一个对象 -->
+	            <!-- <ref bean="u" /> -->
+	        </list>
+	    </property>
+	    <!-- results in a setSomeMap(java.util.Map) call -->
+	    <property name="map">
+	        <map>
+	            <entry key="an entry" value="just some string"/>
+	        </map>
+	    </property>
+	    <!-- results in a setSomeSet(java.util.Set) call -->
+	    <property name="set">
+	        <set>
+	            <value>just some string</value>
+	        </set>
+	    </property>
+	</bean>
+
+	<!-- 自动装配 -->
+	<bean name="userDAO1" class="com.mrhu.spring.OldVersion.dao.impl.onetoseven.UserDAOImpl">
+		<property name="daoId" value="1"></property>
+	</bean>
+	<bean name="userDAO2" class="com.mrhu.spring.OldVersion.dao.impl.onetoseven.UserDAOImpl">
+		<property name="daoId" value="2"></property>
+	</bean>
+	<bean name="userServiceAutowire" class="com.mrhu.spring.OldVersion.service.onetoseven.UserService" autowire="no" init-method="init" destroy-method="destory">
+				
+	</bean>
+	
+	
+</beans>

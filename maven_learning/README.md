@@ -1,0 +1,1 @@
+﻿学习Maven项目---1. 使用标准的文件结构2. 命令：`mvn clean  compile package`

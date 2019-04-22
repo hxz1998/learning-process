@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+-->
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+        "http://struts.apache.org/dtds/struts-2.5.dtd">
+
+
+<struts>
+    <!--  Overwrite Convention -->
+	<!-- 
+	<constant name="struts.convention.action.suffix" value="Controller"/>
+    <constant name="struts.convention.action.mapAllMatches" value="true"/>
+    <constant name="struts.convention.default.parent.package" value="rest-showcase"/>
+    <constant name="struts.convention.package.locators" value="example"/>
+
+ 	<package name="rest-showcase" extends="rest-default"> 
+		<global-allowed-methods>execute,index,show,create,update,destroy,deleteConfirm,edit,editNew</global-allowed-methods>
+    </package>
+    -->   
+     
+    <!-- 动态方法绑定注册 -->
+    <constant name="struts.enable.DynamicMethodInvocation" value="true" />
+     
+    <include file="struts2-mydefaction.xml"></include> 
+    <include file="ognl.xml"></include>
+    <!-- 继承于 struts-default的根目录，默认情况下是"/" -->
+    <package name="front" extends="struts-default">	
+    	<action name="hello" class="com.mrhu.struts.introduction.IndexAction" method="execute" >
+		   	<!-- 可以不加name属性，默认为success -->
+		   	<result name="success">
+		   		/Hello.jsp
+		   	</result>
+    	</action>
+    	
+    	<action name="index2" class="com.mrhu.struts.introduction.IndexAction1" method="execute">
+    		<result name="success">
+    			/Error.jsp
+    		</result>
+    	</action>
+		<action name="index3" class="com.mrhu.struts.introduction.Test" method="execute">
+    		<result name="success">
+    			/index.jsp
+    		</result>
+    	</action>
+   
+    </package>
+    
+    <package name="user" extends="front" namespace="/user">
+     	
+     	<action name="user" class="com.mrhu.struts.attrparaminput.UserAction">
+     		<result>/Studentadd_success.jsp</result>
+    		<allowed-methods>add</allowed-methods>
+     	</action>
+     	<action name="user2" class="com.mrhu.struts.attrparaminput.UserAction2">
+     		<result>/Studentadd_success.jsp</result>
+    		<allowed-methods>add</allowed-methods>
+     	</action>
+     	<action name="user3" class="com.mrhu.struts.drivenparaminput.UserAction">
+     		<result>/Studentadd_success.jsp</result>
+     		<allowed-methods>add</allowed-methods>
+     	</action>
+     	
+    	<action name="userAdd" class="com.mrhu.struts.T0500.UserAction" method="add">
+    		<result>/UserAddSuccess.jsp</result>
+    	</action>
+    	
+    	<action name="user4" class="com.mrhu.struts.simpledatavaliation.UserAction">
+    		<result>/Studentadd_success.jsp</result>
+    		<result name="error">/Error.jsp</result>
+    		<allowed-methods>add</allowed-methods>
+    	</action>
+<!--     	
+    	<action name="user5" class="com.mrhu.struts.dynamicresult.UserAction">
+    		<result>
+    			<param name="location">${r}</param>
+    		</result>
+    	</action>
+    	
+    	<action name="user6" class="com.mrhu.struts.resultwithparam.UserAction">
+    		<result>/user_login_success.jsp?t=${type}</result>
+    	</action>
+ -->    	
+    	<!-- 动态方法绑定，访问时使用actionName!methodName方式访问 -->
+    	<action name="userABB" class="com.mrhu.struts.T0500.UserAction">
+    		<result>/UserAddSuccess.jsp</result>
+    		<!-- 
+    			当不设置全局允许方法时需要额外对action进行指定方法
+    			struts2的2.5版本需要额外指定allowed-methods属性，为了增强安全性
+    		 -->
+    		<allowed-methods>add</allowed-methods>
+    	</action>
+    </package>
+
+	<package name="actions" extends="front" namespace="/actions">
+		
+		<!-- 
+			注册通配符的使用
+			注意！
+			约定优于配置原则
+		-->
+		<global-allowed-methods>regex:.*</global-allowed-methods>
+	
+		<action name="Student*" class="com.mrhu.struts.wildcard.StudentAction" method="{1}">
+			<result>/Student{1}_success.jsp</result>
+		</action> 
+		
+		<action name="*_*" class="com.mrhu.struts.wildcard.{1}Action" method="{2}">
+			<result name="success">/{1}{2}_success.jsp</result>
+			<result name="error">/{1}{2}_error.jsp</result>
+		</action>
+	</package>
+	
+	<package name="login" extends="front" namespace="/login">
+		<global-allowed-methods>regex:.*</global-allowed-methods>
+		<action name="login*" class="com.mrhu.struts.accesswebelement.LoginAction{1}">
+			<result>/user_login_success.jsp</result>
+			<allowed-methods>execute</allowed-methods>
+		</action>
+	</package>
+	
+	<package name="r" extends="front" namespace="/r">
+		<action name="r1">
+			<result type="dispatcher">/r1.jsp</result>
+		</action>
+		
+		<action name="r2">
+			<result type="redirect">
+				<param name="namespace">/user</param>
+				<param name="location">/user_login_success.jsp</param>
+			</result>
+		</action>
+		
+		<action name="r3">
+			<result type="chain">
+				<param name="namespace">/user</param>
+				<param name="actionName">user</param>
+			</result>
+		</action>
+		
+		<!-- 失败了 -->
+		<action name="r4">
+			<result type="redirectAction">
+				<param name="namespace">/r</param>
+				<param name="actionName">r3</param>
+				<param name="parse">false</param>
+				<param name="anchor">FRAGMENT</param>
+			</result>
+		</action>
+	</package>
+</struts>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
